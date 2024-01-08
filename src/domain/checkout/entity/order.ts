@@ -46,4 +46,16 @@ export default class Order {
   total(): number {
     return this._items.reduce((acc, item) => acc + item.total(), 0);
   }
+
+  ChangeItem(orderItem: OrderItem): void {
+    let orderItemIndex = this._items.findIndex(oI => oI.id == orderItem.id);
+    this._items[orderItemIndex] = orderItem
+  }
+
+  ChangeItems(orderItems: OrderItem[]): void {
+    orderItems.forEach( orderItem => {
+      let orderItemIndex = this._items.findIndex(oI => oI.id == orderItem.id);
+      this._items[orderItemIndex] = orderItem
+    })    
+  }
 }
