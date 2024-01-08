@@ -27,15 +27,17 @@ export default class OrderRepository implements OrderRepositoryInterface {
   update(entity: Order): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  find(id: string): Promise<Order> {
-    throw new Error("Method not implemented.");
+  async find(id: string): Promise<Order> {
+    const orderModel = await OrderModel.findOne({ where: { id }, include: ["items"]});
+    return new Order (orderModel.id, orderModel.customer_id, orderModel.items?.map((item) =>
+      new OrderItem(item.id, item.name, item.price, item.product_id, item.quantity)
+    ));    
   }
   async findAll(): Promise<Order[]> {
     const orderModels = await OrderModel.findAll({include: ["items"]});
     return orderModels.map((orderModel) =>
     new Order (orderModel.id, orderModel.customer_id, orderModel.items?.map((item) =>
       new OrderItem(item.id, item.name, item.price, item.product_id, item.quantity)
-    ))    
-    );
+    )));
   }
 }
