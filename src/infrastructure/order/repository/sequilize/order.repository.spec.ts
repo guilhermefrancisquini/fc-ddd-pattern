@@ -160,7 +160,7 @@ describe("Order repository test", () => {
     const order = new Order("1", "123", [orderItem]);
     await orderRepository.create(order);
 
-    const orderModel = await OrderModel.findOne({ where: { id: "1" }, include: ["items"]});
+    const orderModel = await OrderModel.findOne({ where: { id: order.id }, include: ["items"]});
 
     const foundOrder = await orderRepository.find("1");
 
@@ -181,28 +181,28 @@ describe("Order repository test", () => {
     });
 
     product.changePrice(10);
-    orderItem.changePrice(product.price)
-    orderItem.changeQuantity(4)
+    orderItem.changePrice(product.price);
+    orderItem.changeQuantity(4);
+    orderItem.UpdateTotal();
     order.ChangeItem(orderItem);
+    await orderRepository.update(order);
 
-    await orderModel.update(order);
-
-    const orderModel2 = await OrderModel.findOne({ where: { id: "1" }, include: ["items"]});
+    const orderModel2 = await OrderModel.findOne({ where: { id: order.id }, include: ["items"]});
 
     expect(orderModel2.toJSON()).toStrictEqual({
-      id: foundOrder.id,
-      customer_id: foundOrder.customerId,
-      items: foundOrder.items?.map((item) => {
+      id: order.id,
+      customer_id: order.customerId,
+      items: order.items?.map((item) => {
         return {
           id: item.id,
           name: item.name,
-          order_id: foundOrder.id,
+          order_id: order.id,
           price: item.price,
           product_id: item.productId,
           quantity: item.quantity
         }
       }),
-      total: foundOrder.total()
+      total: order.total()
     });
   });
 });

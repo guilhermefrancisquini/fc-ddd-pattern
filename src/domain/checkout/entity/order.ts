@@ -49,13 +49,15 @@ export default class Order {
 
   ChangeItem(orderItem: OrderItem): void {
     let orderItemIndex = this._items.findIndex(oI => oI.id == orderItem.id);
-    this._items[orderItemIndex] = orderItem
+    this._items[orderItemIndex] = orderItem;
+    this._total = this.total();
   }
 
   ChangeItems(orderItems: OrderItem[]): void {
     orderItems.forEach( orderItem => {
       let orderItemIndex = this._items.findIndex(oI => oI.id == orderItem.id);
-      this._items[orderItemIndex] = orderItem
-    })    
+      this._items[orderItemIndex] = orderItem;
+    }) 
+    this._total = this.total();   
   }
 }

@@ -52,4 +52,9 @@ export default class OrderItem {
   changeQuantity(quantity: number): void {
     this._quantity = quantity;
   }
+
+  UpdateTotal(): void {
+    this._total = this.total();
+  }
+
 }
